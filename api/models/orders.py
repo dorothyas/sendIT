@@ -5,9 +5,9 @@ conn= Connection()
 class Orders():
     """ class for orders data """
    
-    def place_order(self, parcel_type, weight, receiver, pick_up, destination, status, present_location):
+    def place_order(self, parcel_type, weight, receiver, pick_up, destination, present_location):
     
-        user_order = ("INSERT INTO orders (parcel_type, weight, receiver, pick_up, destination, status, present_location) VALUES('{}', '{}', '{}', '{}','{}','{}', '{}')".format( parcel_type, weight, receiver, pick_up, destination, status, present_location))
-        conn.cursor.execute(user_order)
+        query = ("INSERT INTO orders (parcel_type, weight, receiver, pick_up, destination, present_location) VALUES('{}', '{}', '{}', '{}','{}','{}')".format( parcel_type, weight, receiver, pick_up, destination, present_location))
+        conn.cursor.execute(query)
         return 'Order Added'
 
