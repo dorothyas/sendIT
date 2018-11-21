@@ -58,7 +58,7 @@ class Signin(MethodView):
 
     def post(self):
 
-        signin_user =  Users()
+        user =  Users()
         
         keys = ("user_name", "user_password")
         if not set(keys).issubset(set(request.json)):
@@ -73,10 +73,10 @@ class Signin(MethodView):
         if request.json['user_password'].strip() == "":
             return jsonify({'Message':'Enter User_password'}), 400
 
-        user_id = signin_user.get_user(request.json['user_name'], request.json['user_password'])
-        if not user_id:
+        logged_user = user.get_user(request.json['user_name'], request.json['user_password'])
+        if not logged_user:
             return jsonify({'Message': 'User does not exist'})
-        return jsonify({'access_token': create_access_token(identity= user_id),
+        return jsonify({'access_token': create_access_token(identity=logged_user),
             'Message': 'User logged in'})
         
 

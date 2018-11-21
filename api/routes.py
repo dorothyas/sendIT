@@ -21,6 +21,6 @@ class Urls(object):
         app.add_url_rule('/api/v1/parcels/<int:order_id>/status',
                          view_func=Status.as_view('update_order'), methods=['PUT',])   
         app.add_url_rule('/api/v1/parcels/<int:order_id>/destination',
-                         view_func=Location.as_view('update destination'), methods=['PUT',])
+                         view_func=Destination.as_view('update destination'), methods=['PUT',])
         app.add_url_rule('/api/v1/parcels/<int:order_id>/presentlocation',
-                         view_func=Destination.as_view('update location'), methods=['PUT',])                                                                                                    
+                         view_func=Location.as_view('update location'), methods=['PUT',])                                                                                                    

@@ -1,4 +1,5 @@
 import psycopg2
+import os
 
 
 class Connection:
@@ -6,8 +7,11 @@ class Connection:
 
     def __init__(self):
 
+        postgres = "sendIT"
+        if os.getenv('APP_SETTINGS') == 'testing':
+            postgres = "test_db"
 
-        self.connection = psycopg2.connect(dbname= 'sendIT',
+        self.connection = psycopg2.connect(dbname= postgres,
                                         user='postgres',
                                         password='dorothy',
                                         host='localhost',
@@ -15,6 +19,7 @@ class Connection:
                                         )
         self.connection.autocommit = True
         self.cursor = self.connection.cursor()
+        print(postgres)
         print('Connected to database')
 
 
@@ -27,13 +32,18 @@ class Connection:
         self.cursor.execute(table)
         
         table = "CREATE TABLE IF NOT EXISTS orders \
-			( order_id SERIAL PRIMARY KEY, parcel_type VARCHAR(15), weight INTEGER, receiver VARCHAR(15), \
-            pick_up VARCHAR(15), destination VARCHAR(15), status VARCHAR (255) DEFAULT 'pending', present_location VARCHAR(15), \
-            user_id integer ,FOREIGN KEY (user_id) REFERENCES users(user_id)) ;"
+			( order_id SERIAL PRIMARY KEY, parcel_type VARCHAR(15),\
+             weight INTEGER, receiver VARCHAR(15), \
+            pick_up VARCHAR(15), destination VARCHAR(15), \
+            status VARCHAR (255) DEFAULT 'pending',\
+             present_location VARCHAR(15), \
+             user_id INTEGER REFERENCES users(user_id)) ;"
         self.cursor.execute(table)
 
     def drop_tables(self):
-        """method deletes tables"""
+        """
+        method deletes tables
+        """
 
         drop_user_table = "DROP TABLE users cascade"
         drop_orders_table = "DROP TABLE orders cascade"

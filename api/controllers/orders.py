@@ -8,13 +8,15 @@ from flask_jwt_extended import JWTManager, jwt_required, create_access_token,get
 class Order (MethodView):    
     @jwt_required
     def post(self):
+        current_user= get_jwt_identity()
         make_order = Orders()
 
         keys = ("parcel_type", "weight", "receiver", "pick_up", "destination", "present_location")
         if not set(keys).issubset(set(request.json)):
             return jsonify({"Message":'Missing data'}), 400
 
-        parcel_order = make_order.place_order(request.json['parcel_type'],request.json['weight'],request.json['receiver'],request.json['pick_up'],request.json['present_location'], request.json['destination'])
+        parcel_order = make_order.place_order(request.json['parcel_type'],request.json['weight'],
+                request.json['receiver'],request.json['pick_up'],request.json['present_location'], request.json['destination'], current_user[0])
         
         return jsonify({'message': parcel_order}), 201
            
@@ -44,7 +46,7 @@ class Status(MethodView):
         new_status = update_status.update_status(str(order_id), request.json['status'].strip())
 
         if new_status:
-            response = {'message': new_status }
+            response = {'message': 'status has been updated' }
             return jsonify(response), 200
         return jsonify({'msg': 'No orders '}), 400
 
@@ -69,28 +71,28 @@ class Location(MethodView):
         new_location = update_location.update_location(str(order_id), request.json['present_location'].strip())
 
         if new_location:
-            response= {'message': new_location }
+            response= {'msg': 'location has been updated'}
             return jsonify(response), 200
         return jsonify({'Alert':"Not Authorised to perform this task"}),400
+
 class Destination(MethodView):
     @jwt_required
     def put(self,order_id):
        
         update_destination = Orders()
 
-        keys = ("destination")
+        keys = ("destination",)
         if not set(keys).issubset(set(request.json)):
             return jsonify({'msg':'missing data'}), 400
 
         new_destination = update_destination.update_destination(str(order_id), request.json['destination'].strip())
 
-        if not new_destination:
-            return jsonify({'msg': 'order not found'})
-            
-        response = {'data': new_destination,
-        'msg':'successfully changed destination'
-        }
-        return jsonify(response), 200
+        if new_destination:
+            response_object = {
+            'status': 'success',
+            'message':'destination has been update'}
+            return jsonify(response_object), 200 
+        return jsonify({'msg': 'order not found'})  
         
    
 
