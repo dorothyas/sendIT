@@ -6,9 +6,13 @@ class Orders():
     """ class for orders data """
    
     def place_order(self, parcel_type, weight, receiver, pick_up, destination, present_location, user_id):
-    
-        query = ("INSERT INTO orders (parcel_type, weight, receiver, pick_up, destination, present_location, user_id) VALUES\
-        ('{}', '{}', '{}', '{}','{}','{}','{}')".format( parcel_type, weight, receiver, pick_up, destination, present_location , user_id))
+        """ 
+            method for updating status 
+        """
+        query = ("INSERT INTO orders (parcel_type, weight, receiver, pick_up, destination, \
+        present_location, user_id) VALUES\
+        ('{}', '{}', '{}', '{}','{}','{}','{}')".format( parcel_type, weight, receiver, pick_up, \
+        destination, present_location , user_id))
         conn.cursor.execute(query)
         return 'Order Added'
 
@@ -17,7 +21,8 @@ class Orders():
         conn.cursor.execute("SELECT * FROM orders")
         fetched_parcels = conn.cursor.fetchall() 
 
-        keys=["order_id", "parcel_type", "weight", "receiver", "pick_up", "destination", "status", "present_location","user_id"]
+        keys=["order_id", "parcel_type", "weight", "receiver", "pick_up", "destination", "status", \
+        "present_location","user_id"]
        
         parcels = []
         for parcel in fetched_parcels:
@@ -34,7 +39,8 @@ class Orders():
             return "Order not available at the moment" 
         
         one_parcel = []
-        keys=["order_id", "parcel_type", "weight", "receiver", "pick_up", "destination", "status", "present_location","user_id"]
+        keys=["order_id", "parcel_type", "weight", "receiver", "pick_up", "destination", "status", \
+        "present_location","user_id"]
        
         one_parcel.append(dict(zip(keys, fetched_parcel))) 
         return one_parcel    

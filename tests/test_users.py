@@ -1,12 +1,11 @@
-
-"""
-    Module for making tests on the app for sign up
-"""
-import os
 import json
+import os
 import unittest
+
 import psycopg2
+
 from run import APP
+
 
 class TestUsers(unittest.TestCase):
     """"
@@ -18,6 +17,7 @@ class TestUsers(unittest.TestCase):
            Method for making the client object
         """
         self.client = APP.test_client
+        
     def test_signup(self):
         result = self.client().post('/api/v1/auth/signup',
                                     content_type="application/json",
@@ -146,10 +146,3 @@ class TestUsers(unittest.TestCase):
                                     data=json.dumps(dict(email="", password="18181818")))
 
         self.assertEqual(result.status_code, 400)
-
-
-
-
-
-
-        

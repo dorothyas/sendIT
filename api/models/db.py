@@ -25,9 +25,9 @@ class Connection:
 
     def create_tables(self):
         """ This method creates tables in the PostgreSQL database"""
-
+        
         table = "CREATE TABLE IF NOT EXISTS users ( user_id SERIAL PRIMARY KEY, \
-            user_name VARCHAR(10), user_email VARCHAR(100), contact INTEGER, user_password VARCHAR(100), \
+            user_name VARCHAR(10), user_email VARCHAR(100), user_password VARCHAR(100), \
             admin BOOLEAN NOT NULL);"
         self.cursor.execute(table)
         

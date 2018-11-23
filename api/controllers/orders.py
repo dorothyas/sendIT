@@ -1,13 +1,24 @@
-from flask import jsonify, request
-from flask.views import MethodView
-from api.models.orders import Orders
 import re
 
-from flask_jwt_extended import JWTManager, jwt_required, create_access_token,get_jwt_identity
+from flask import jsonify, request
+from flask.views import MethodView
+from flask_jwt_extended import (JWTManager, create_access_token,
+                                get_jwt_identity, jwt_required)
 
-class Order (MethodView):    
+from api.models.orders import Orders
+
+
+class Order (MethodView): 
+    """ 
+        class for getting  orders data
+    """
+
     @jwt_required
     def post(self):
+        """ 
+            method for adding parcel order
+        """
+
         current_user= get_jwt_identity()
         make_order = Orders()
 
@@ -16,12 +27,17 @@ class Order (MethodView):
             return jsonify({"Message":'Missing data'}), 400
 
         parcel_order = make_order.place_order(request.json['parcel_type'],request.json['weight'],
-                request.json['receiver'],request.json['pick_up'],request.json['present_location'], request.json['destination'], current_user[0])
+                request.json['receiver'],request.json['pick_up'],request.json['present_location'],
+                 request.json['destination'], current_user[0])
         
         return jsonify({'message': parcel_order}), 201
            
 
-class GetOrder(MethodView):    
+class GetOrder(MethodView): 
+    """ 
+        method for getting  orders 
+    """    
+
     @jwt_required
     def get(self, order_id):
         make_order = Orders
@@ -39,9 +55,16 @@ class GetOrder(MethodView):
 
 
 class Status(MethodView):
+    """ 
+        method for updating status 
+    """
     @jwt_required
     def put(self, order_id):
         update_status = Orders()
+
+        current_user=get_jwt_identity()
+        if current_user[4] == False:
+            return jsonify({'Message': 'Admin Only'})
 
         new_status = update_status.update_status(str(order_id), request.json['status'].strip())
 
@@ -51,35 +74,41 @@ class Status(MethodView):
         return jsonify({'msg': 'No orders '}), 400
 
 class Location(MethodView):
-
+    """ 
+        method for updating location
+    """
     @jwt_required
     def put(self, order_id):
     
         update_location = Orders()
 
-        data = request.json
-        keys = ('present_location')
+        current_user=get_jwt_identity()
+        if current_user[4] == False:
+            return jsonify({'Message': 'Admin Only'})
 
-        if keys not in data:
-            return 'missing data'
-        try:
-            present_location = data['present_location'].strip()
-        except:
-            return 'Invalid data',400
-        if not present_location:
-            return 'Empty data',400
-        new_location = update_location.update_location(str(order_id), request.json['present_location'].strip())
+        data = request.json
+        keys = ("present_location", )
+
+        if not set(keys).issubset(set(request.json)):
+            return jsonify({"Message":'Missing data'}), 400
+       
+        new_location = update_location.update_location(str(order_id), data['present_location'].strip())
 
         if new_location:
             response= {'msg': 'location has been updated'}
             return jsonify(response), 200
-        return jsonify({'Alert':"Not Authorised to perform this task"}),400
 
 class Destination(MethodView):
+    """ 
+        method for updating status 
+    """
     @jwt_required
     def put(self,order_id):
        
         update_destination = Orders()
+        current_user=get_jwt_identity()
+        if current_user[4] == True:
+            return jsonify({'Message': 'Only User can update location'}), 400
 
         keys = ("destination",)
         if not set(keys).issubset(set(request.json)):
@@ -89,12 +118,6 @@ class Destination(MethodView):
 
         if new_destination:
             response_object = {
-            'status': 'success',
             'message':'destination has been update'}
             return jsonify(response_object), 200 
-        return jsonify({'msg': 'order not found'})  
-        
-   
-
-
-       
+        return jsonify({'msg': 'Order not found'}), 404

@@ -1,10 +1,8 @@
-"""
-    Module for making tests on the app for sign up
-"""
-import unittest
 import json
-from run import APP
+import unittest
+
 from api.models.db import Connection
+from run import APP
 
 
 class TestViews(unittest.TestCase):
@@ -60,6 +58,3 @@ class TestViews(unittest.TestCase):
         self.assertIsInstance(respond, dict)
         self.assertEqual(result.status_code, 401)
         self.assertTrue(result.json["msg"])
-       
-
-    
