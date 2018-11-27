@@ -38,7 +38,7 @@ class Signup(MethodView):
             
         pattern = r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$"
         if not re.match(pattern, data['user_email']):
-            return jsonify({'message':'Enter valid Email'}), 400
+            return jsonify({'Message':'Enter valid Email'}), 400
 
 
         user_name = data.get("user_name")
