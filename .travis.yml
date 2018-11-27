@@ -2,9 +2,9 @@ language: python
 python:
 - '3.6'
 install:
-- pip install -r requirements.txt
+  - pip install -r requirements.txt
 env:
--testing = True
+  -testing = True
 services:
   - postgresql
 before_script:
@@ -14,9 +14,9 @@ before_script:
 addons:
   postgresql: "9.4"
 script:
-- pytest --cov=.
-- coverage
-- coveralls
-- coverage report
+  - pytest --cov=.
+  - coverage
+  - coveralls
+  - coverage report
 after_success:
-- coveralls
+  - coveralls
