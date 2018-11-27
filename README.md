@@ -67,6 +67,6 @@ SendIT is a courier service that helps users deliver parcels to different destin
 ## Project links:
 •	Github Pages: https://dorothyas.github.io/send_IT/UI
 
-• Heroku 
+• Heroku : https://stargal-dorothy.herokuapp.com/api/v1/parcels
 ## Author
 - Dorothy Asiimwe
