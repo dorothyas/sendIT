@@ -7,22 +7,28 @@ class Connection:
 
     def __init__(self):
 
-        postgres = "sendIT"
-        if os.getenv('APP_SETTINGS') == 'testing':
-            postgres = "test_db"
-
-        self.connection = psycopg2.connect(dbname= postgres,
+        try:
+            if(os.getenv("FLASK_ENV")) == "Production":
+                self.connection = psycopg2.connect(os.getenv("DATABASE_URL"))
+            elif(os.getenv("FLASK_ENV")) == "TESTING":
+                self.connection = psycopg2.connect(dbname= 'test_db',
                                         user='postgres',
                                         password='dorothy',
                                         host='localhost',
                                         port='5432'
                                         )
-        self.connection.autocommit = True
-        self.cursor = self.connection.cursor()
-        print(postgres)
-        print('Connected to database')
-
-
+            else:
+                self.connection = psycopg2.connect(dbname= 'sendIT',
+                                        user='postgres',
+                                        password='dorothy',
+                                        host='localhost',
+                                        port='5432'
+                                        )
+            self.connection.autocommit = True
+            self.cursor = self.connection.cursor()
+        except(Exception, psycopg2.DatabaseError) as error:
+            raise error
+            
     def create_tables(self):
         """ This method creates tables in the PostgreSQL database"""
         
