@@ -41,7 +41,7 @@ class TestViews(unittest.TestCase):
         self.assertIsInstance(respond, dict)
 
     def test_update_status(self):
-        result = self.client().put('/api/v1/parcels/<int:order_id>/status')
+        result = self.client().put('/api/v1/parcels/1/status')
         respond = json.loads(result.data.decode("utf8"))
         self.assertIn('msg', respond)
         self.assertIsInstance(respond, dict)
@@ -52,7 +52,7 @@ class TestViews(unittest.TestCase):
         """
             Method for testing the update function to update location
         """
-        result = self.client().put('/api/v1/parcels/<int:order_id>/location')
+        result = self.client().put('/api/v1/parcels/1/presentlocation')
         respond = json.loads(result.data.decode("utf8"))
         self.assertIn('msg', respond)
         self.assertIsInstance(respond, dict)
