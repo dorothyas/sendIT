@@ -42,7 +42,7 @@ class Connection:
 
     def drop_tables(self):
         """
-        method deletes tables
+            method deletes tables
         """
 
         drop_user_table = "DROP TABLE users cascade"
