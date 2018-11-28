@@ -29,6 +29,9 @@ class Connection:
         except(Exception, psycopg2.DatabaseError) as error:
             raise error
             
+        self.create_tables()
+
+        
     def create_tables(self):
         """ This method creates tables in the PostgreSQL database"""
         
@@ -56,4 +59,3 @@ class Connection:
         self.cursor.execute(drop_user_table)
         self.cursor.execute(drop_orders_table) 
 
-Connection().create_tables()
