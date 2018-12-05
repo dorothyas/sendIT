@@ -45,7 +45,7 @@ class Connection:
              weight INTEGER, receiver VARCHAR(15), \
             pick_up VARCHAR(15), destination VARCHAR(15), \
             status VARCHAR (255) DEFAULT 'pending',\
-             present_location VARCHAR(15), \
+             present_location VARCHAR(15) DEFAULT 'none', \
              user_id INTEGER REFERENCES users(user_id)) ;"
         self.cursor.execute(table)
 

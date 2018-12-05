@@ -25,15 +25,18 @@ class Users:
         conn.cursor.execute(insert_user)
         return "Account successfully created, Please login"
 
-    def get_user(self, user_name, password):
+    def get_user(self, user_name,  user_password):
         """ 
             method for getting  user 
         """
     
         conn=Connection() 
         conn.cursor.execute("SELECT * FROM users where user_name = %s", [user_name])
-        user = conn.cursor.fetchone() 
-        return user
+        users = conn.cursor.fetchall() 
+        for user in users:
+            if user[1] == user_name and check_password_hash(user[3], user_password):
+                return user
+        return None    
         
     def make_admin(self):
         """ 
