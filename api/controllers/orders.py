@@ -22,13 +22,12 @@ class Order (MethodView):
         current_user= get_jwt_identity()
         make_order = Orders()
 
-        keys = ("parcel_type", "weight", "receiver", "pick_up", "destination", "present_location")
+        keys = ("parcel_type", "weight", "receiver", "pick_up", "destination")
         if not set(keys).issubset(set(request.json)):
             return jsonify({"Message":'Missing data'}), 400
 
         parcel_order = make_order.place_order(request.json['parcel_type'],request.json['weight'],
-                request.json['receiver'],request.json['pick_up'],request.json['present_location'],
-                 request.json['destination'], current_user[0])
+                request.json['receiver'],request.json['pick_up'], request.json['destination'], current_user[0])
         
         return jsonify({'message': parcel_order}), 201
            

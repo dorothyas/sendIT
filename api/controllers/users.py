@@ -49,10 +49,12 @@ class Signup(MethodView):
         user.make_admin()
 
         if user_details == "Email already exists":
-            return jsonify({'Message': user_details}), 401
+            return jsonify({'Message': user_details,
+            'status':'failure'}), 400
                             
 
-        return jsonify({'Message': user_details}), 201
+        return jsonify({'Message': user_details,
+        'status':'success'}), 201
         
 class Signin(MethodView):
     """ 
@@ -80,9 +82,9 @@ class Signin(MethodView):
 
         logged_user = user.get_user(request.json['user_name'], request.json['user_password'])
         if not logged_user:
-            return jsonify({'Message': 'User does not exist'})
+            return jsonify({'Message': 'User does not exist'}), 404
         return jsonify({'access_token': create_access_token(identity=logged_user),
-            'Message': 'User logged in'})
+            'message': 'User logged in'}),200
         
 
 
