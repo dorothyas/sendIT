@@ -17,7 +17,7 @@ class Signup(MethodView):
 
         data = request.get_json()
         
-        keys = ("user_name","user_email", "user_password")
+        keys = ("user_name","user_email", "user_password", "user_password1")
 
         if not set(keys).issubset(set(request.json)):
             return jsonify({"Message":'Missing data'}), 400
@@ -44,12 +44,17 @@ class Signup(MethodView):
         user_name = data.get("user_name")
         user_email = data.get("user_email")
         user_password = data.get("user_password")
+        user_password1 = data.get("user_password1")
+
         admin = False
         user_details = user.register_user(user_name, user_email, user_password, admin)
         user.make_admin()
 
         if user_details == "Email already exists":
             return jsonify({'Message': user_details}), 400
+
+        if user_password != user_password1:
+            return jsonify({'Message': 'Passwords do not match'})
                             
 
         return jsonify({'Message': 'registered',
