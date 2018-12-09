@@ -65,7 +65,7 @@ class TestUsers(unittest.TestCase):
         respond = json.loads(result.data.decode("utf8"))
         self.assertIn('Message', respond)
         self.assertIsInstance(respond, dict)
-        self.assertEqual(result.status_code, 201)
+        self.assertEqual(result.status_code, 400)
 
     def test_signup_with_field(self):
         result = self.client().post('/api/v1/auth/signup',
