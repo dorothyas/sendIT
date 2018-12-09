@@ -43,7 +43,19 @@ class Orders():
        
         one_parcel.append(dict(zip(keys, fetched_parcel))) 
         return one_parcel    
-            
+
+    def specific_user_orders(self, user_id):
+        
+        conn.cursor.execute("SELECT * FROM orders WHERE user_id = %s", [user_id] )
+        keys = ["order_id", "parcel_type", "pick_up", "destination", "receiver",  "present_location", "weight", "status", "user_id"]
+        user_orders = conn.cursor.fetchall()
+        user_specfic_list = []
+        for order in user_orders:
+            user_specfic_list.append(dict(zip(keys, order)))
+        if user_specfic_list == []:
+            return "no orders for this user"
+        return user_specfic_list
+
     def update_status(self, order_id, status):
         conn.cursor.execute("""SELECT "order_id" FROM orders WHERE order_id = %s""",[order_id] )
         order_status=conn.cursor.fetchone()
@@ -80,6 +92,20 @@ class Orders():
         updated_rows = conn.cursor.rowcount
         return updated_rows
             
+    def update_cancel_status(self,order_id, status):
+           
+        conn.cursor.execute("""SELECT * FROM orders WHERE order_id= %s """,(order_id ,) )
+        check_status = conn.cursor.fetchone()
+        print (check_status)
+        if not check_status:
+            return "No order found"
+
+        cancel_order = "UPDATE orders SET status = %s WHERE order_id = %s;"
+        conn.cursor.execute(cancel_order,(status, order_id, ))
+        updated_rows = conn.cursor.rowcount
+        return updated_rows
+
+
 
 
             

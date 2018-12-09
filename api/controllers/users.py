@@ -49,12 +49,11 @@ class Signup(MethodView):
         user.make_admin()
 
         if user_details == "Email already exists":
-            return jsonify({'Message': user_details,
-            'status':'failure'}), 400
+            return jsonify({'Message': user_details}), 400
                             
 
-        return jsonify({'Message': user_details,
-        'status':'success'}), 201
+        return jsonify({'Message': 'registered',
+        'Message': user_details}), 201
         
 class Signin(MethodView):
     """ 
