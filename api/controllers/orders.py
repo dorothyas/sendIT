@@ -26,10 +26,10 @@ class Order (MethodView):
         if not set(keys).issubset(set(request.json)):
             return jsonify({"Message":'Missing data'}), 400
 
-        parcel_order = make_order.place_order(request.json['parcel_type'],request.json['weight'],
+        parcel_id = make_order.place_order(request.json['parcel_type'],request.json['weight'],
                 request.json['receiver'],request.json['pick_up'], request.json['destination'], current_user[0])
         
-        return jsonify({'Message': parcel_order}), 201
+        return jsonify({'id': parcel_id, 'Message': "Parcel created"}), 201
            
 
 class GetOrder(MethodView): 

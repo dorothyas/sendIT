@@ -10,10 +10,11 @@ class Orders():
             method for updating status 
         """
         query = ("INSERT INTO orders (parcel_type, weight, receiver, pick_up, destination, user_id) VALUES\
-        ('{}', '{}', '{}', '{}','{}','{}')".format( parcel_type, weight, receiver, pick_up, \
+        ('{}', '{}', '{}', '{}','{}','{}') RETURNING order_id".format( parcel_type, weight, receiver, pick_up, \
         destination, user_id))
         conn.cursor.execute(query)
-        return 'Order Added'
+        parcel_id = conn.cursor.fetchone()
+        return parcel_id
 
     def get_orders(self):
 

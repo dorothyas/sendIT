@@ -88,7 +88,7 @@ class Signin(MethodView):
         if not logged_user:
             return jsonify({'Message': 'User does not exist'}), 404
         return jsonify({'access_token': create_access_token(identity=logged_user),
-            'message': 'User logged in'}),200
+            'message': 'User logged in successfully'}),200
         
 
 
